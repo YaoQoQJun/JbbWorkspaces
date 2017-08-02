@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.jybb.mapper.HbaseMapper">
+	<select id="getExtensionData"  resultType="com.jybb.pojo.Seo">
+		select ifnull(sum(pv),0) AS pvs,ifnull(sum(uv),0) AS uvs,ifnull(sum(ip),0) ips from hbase_extension where start=#{start} and extension_id=#{extension_id}
+	</select>
+	
+	<select id="getDisableData"  resultType="com.jybb.pojo.Seo">
+		select ifnull(sum(pv),0) AS pvs,ifnull(sum(uv),0) AS uvs,ifnull(sum(ip),0) ips from hbase_disable where start=#{start} and disable_id=#{disable_id}
+	</select>
+	
+	<select id="getExtensionDayData"  resultType="com.jybb.pojo.Seo">
+		select ifnull(sum(pv),0) AS pvs,ifnull(sum(uv),0) AS uvs,ifnull(sum(ip),0) ips from hbase_extension where start &gt;= #{start} and end &lt;= #{end} and extension_id=#{extension_id}
+	</select>
+	
+	<select id="getDisableDayData"  resultType="com.jybb.pojo.Seo">
+		select ifnull(sum(pv),0) AS pvs,ifnull(sum(uv),0) AS uvs,ifnull(sum(ip),0) ips from hbase_disable where start &gt;= #{start} and end &lt;= #{end} and disable_id=#{disable_id}
+	</select>
+	
+ 	<select id="findUrlByPage" resultType="java.lang.String">
+ 		select DISTINCT a.url from `${tableName}` a where a.ctime &gt;= #{t1} and a.ctime &lt;#{t2} and a.url like '%${extension_link}%' limit #{start},#{pageSize}
+ 	</select>
+ 	
+ 	<select id="countUrl"  resultType="java.lang.Integer">
+ 		SELECT count(*) FROM (select DISTINCT a.url from `${tableName}` a where a.ctime &gt;= #{t1} and a.ctime &lt;#{t2} and url like '%${extension_link}%') b
+ 	</select>
+ 	
+ 	<select id="findHbaseDetailByPage" resultType="com.jybb.pojo.HbaseDetail">
+ 		SELECT * FROM `hbase_detail` WHERE 1 and url like '${extension_link}%' and time=#{t1} order by count_pv desc limit #{start},#{pageSize}
+ 	</select>
+ 	
+ 	<select id="countHbaseDetail" resultType="java.lang.Integer">
+ 		select count(*) FROM `hbase_detail` WHERE 1 and url like '${extension_link}%' and time=#{t1} 
+ 	</select>
+ 	
+ 	<select id="findHbaseDetailBySearch_link" resultType="com.jybb.pojo.HbaseDetail">
+ 		SELECT * FROM `hbase_detail` WHERE 1 and url =#{search_link} and time=#{t1} order by count_pv desc limit #{start},#{pageSize}
+ 	</select>
+ 	
+ 	<select id="countHbaseDetailBySearch_link" resultType="java.lang.Integer">
+ 		select count(*) FROM `hbase_detail` WHERE 1 and url=#{search_link} and time=#{t1} 
+ 	</select>
+</mapper>

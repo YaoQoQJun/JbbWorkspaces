@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.jybb.mapper.ChannelMapper">
+	
+	<select id="findAll" resultType="com.jybb.pojo.Channel">
+		select * from channel limit #{start},#{pageSize}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		select count(*) from channel
+	</select>
+ 	
+ 	<select id="findChannelByChannelId" parameterType="java.lang.String" resultType="com.jybb.pojo.Channel">
+ 		select * from channel where channel_id=#{channel_id,jdbcType=VARCHAR} 
+ 		<if test="id != null and id neq ''">
+ 			and id!=#{id,jdbcType=INTEGER}
+ 		</if>
+ 	</select>
+ 	
+ 	<insert id="addChannel"  parameterType="com.jybb.pojo.Channel">
+ 		insert into channel(channel_id,channel_name) values(#{channel_id,jdbcType=VARCHAR},#{channel_name,jdbcType=VARCHAR})
+ 	</insert>
+ 	
+ 	<update id="updateChannel" parameterType="com.jybb.pojo.Channel">
+ 		update channel set 
+ 			channel_id=#{channel_id,jdbcType=VARCHAR},
+ 			channel_name=#{channel_name,jdbcType=VARCHAR}
+ 		where id=#{id,jdbcType=INTEGER}
+ 	</update>
+ 	
+ 	<delete id="deleteChannel" parameterType="java.lang.Integer">
+ 		delete from channel where id=#{id}
+ 	</delete>
+</mapper>

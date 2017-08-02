@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+	<property name="LOG_HOME"
+		value="/data/logs/tomcat/dmp01" />
+	<!-- 每日文件 5天 20M -->
+	<appender name="ROLLING"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 在多数的Log工具中，级别是可以传递，例如如果指定了日志输出级别为DEBUG， 那么INFO、ERROR级别的log也会出现在日志文件。这种默认给程序的调试带来了很多的麻烦 
+			通过配置Filter 来严格控制日志输入级别 <level>:设置过滤级别 <onMatch>:用于配置符合过滤条件的操作 <onMismatch>:用于配置不符合过滤条件的操作 
+			如果返回DENY，那么记录事件立即被抛弃，不再经过剩余过滤器； 如果返回NEUTRAL，那么有序列表里的下一个过滤器会接着处理记录事件； 如果返回ACCEPT，那么记录事件被立即处理，不再经过剩余过滤器。 
+			<filter class="ch.qos.logback.classic.filter.LevelFilter"> <level>WARN</level> 
+			<onMatch>ACCEPT</onMatch> <onMismatch>DENY</onMismatch> </filter> -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/DMP-lb-%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<maxHistory>30</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>20MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder charset="UTF-8"> <!-- encoder 可以指定字符集，对于中文输出有意义 -->
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n%n
+			</pattern>
+		</encoder>
+		<append>true</append>
+	</appender>
+
+	<!-- 输出到控制台和文件，可定义更多的 Appender -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoder 默认配置为PatternLayoutEncoder -->
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<!-- Logger可以被分配级别。级别包括：TRACE、DEBUG、INFO、WARN和ERROR， 定义于ch.qos.logback.classic.Level类。程序会打印高于或等于所设置级别的日志， 
+		设置的日志等级越高，打印出来的日志就越少。如果设置级别为INFO，则优先级高于等于INFO级别 （如：INFO、 WARN、ERROR）的日志信息将可以被输出,小于该级别的如DEBUG将不会被输出。 
+		为确保所有logger都能够最终继承一个级别，根logger总是有级别，默认情况下，这个级别是DEBUG。 在log4j 的配置文件中，子Logger 
+		的输出源默认会继承父类的输出源appender，就是子Logger即在自己的输出源中输出， 也会在父类的配置输出源中输出。但若只想在子类自己的输出源中输出，不在父类的输出源中输出，就需要设置additivity为false。 -->
+
+	<root level="WARN"><!-- "DEBUG" -->
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="ROLLING" />
+	</root>
+
+	<!-- 下面配置一些第三方包的日志过滤级别，用于避免刷屏 -->
+	<logger name="com.mchange" level="WARN" />
+	<logger name="org.hibernate" level="WARN" />
+	<logger name="org.springframework" level="WARN" />
+	<logger name="org.apache" level="WARN" />
+	<logger name="org.mybatis" level="WARN" />
+
+</configuration>

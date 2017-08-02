@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.jybb.mapper.AdminMapper">
+	
+	<select id="findAdmin" resultType="com.jybb.pojo.Admin" >
+		select * from admin where username=#{username} and password=#{password}
+	</select>
+	
+	<select id="findAdminByUsername" resultType="com.jybb.pojo.Admin">
+		select * from admin where username=#{username}
+		<if test="admin_id != null and admin_id neq ''">
+			and id!=#{admin_id}
+		</if>
+	</select>
+	
+	<select id="findAll" resultType="com.jybb.pojo.Admin">
+		select * from admin limit #{start},#{number}
+	</select>
+	
+	<select id="countAdmin" resultType="java.lang.Integer">
+		select count(*) from admin
+	</select>
+	
+	<delete id="deleteAdminRoleByRoleId" parameterType="java.lang.Integer">
+		delete from admin_role where role_id=#{role_id}
+	</delete>
+	
+	<delete id="deleteAdminRoleByAdminId" parameterType="java.lang.Integer">
+		delete from admin_role where admin_id=#{admin_id}
+	</delete>
+	
+	<insert id="addAdmin" parameterType="com.jybb.pojo.Admin" useGeneratedKeys="true" keyProperty="id">
+		insert into admin(
+		username,
+		password,
+		channel_id)
+		values(
+		#{username,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{channel_id,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="addAdminRole">
+		insert into admin_role values(#{admin_id,jdbcType=INTEGER},#{role_id,jdbcType=INTEGER})
+	</insert>
+	
+	<update id="updateAdmin" parameterType="com.jybb.pojo.Admin">
+		update admin set 
+		username=#{username,jdbcType=VARCHAR},
+		password=#{password,jdbcType=VARCHAR},
+		channel_id=#{channel_id,jdbcType=VARCHAR}
+		where id=#{id,jdbcType=INTEGER}
+	</update>
+	
+	<delete id="deleteAdmin" parameterType="java.lang.Integer">
+		delete from admin where id=#{id}
+	</delete>
+	
+	<select id="getPrivileges" parameterType="java.lang.Integer"  resultType="java.util.HashMap">
+		SELECT 
+			f.privilege_name privilege_name,g.model_name model_name
+		FROM 
+			admin a 
+		LEFT JOIN 
+			admin_role b
+		ON 
+			a.`id`=b.admin_id
+		LEFT JOIN 
+			role c
+		ON 
+			b.`role_id`=c.`id`
+		LEFT JOIN
+			role_privilege_model d
+		ON
+			c.`id`=d.`role_id`
+		LEFT JOIN
+			privilege_model e
+		ON
+			d.`privilege_model_id`=e.`id`
+		LEFT JOIN 
+			privilege f
+		ON
+			e.`privilege_id`=f.`id`
+		LEFT JOIN 
+			model g
+		ON
+			e.`model_id`=g.`id`
+		
+		WHERE 
+			a.`id`=#{admin_id}
+	</select>
+ 	
+</mapper>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.jybb.mapper.ExtensionMapper">
+
+	<resultMap type="com.jybb.pojo.Extension" id="extensionMap">
+		<id property="id" column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+		<result property="website_id" column="website_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+		<result property="channel_id" column="channel_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result property="channel_name" column="channel_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result property="extension_link" column="extension_link" javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result property="state" column="state" javaType="java.lang.Integer" jdbcType="INTEGER" />
+		<result property="son_count" column="son_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
+		<result property="add_time" column="add_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" />
+		<result property="enable_time" column="enable_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+		<result property="disable_time" column="disable_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+		
+		<association property="website" javaType="com.jybb.pojo.Website" column="website_id">
+			<id property="id" column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+			<result property="name" column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+			<result property="domain_name" column="domain_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+			<result property="code" column="code" javaType="java.lang.String" jdbcType="VARCHAR" />
+			<result property="state" column="state" javaType="java.lang.Integer" jdbcType="INTEGER" />
+			<result property="add_time" column="add_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" />
+			<result property="enable_time" column="enable_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP" />
+			<result property="disable_time" column="disable_time" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+		</association>
+		
+	</resultMap>
+
+	<select id="findExtensions" resultType="com.jybb.pojo.Extension">
+		select * from extension where state=1
+	</select>
+	
+	<select id="findExtensionsByUrl" resultType="com.jybb.pojo.Extension">
+		select * from extension where state=1 and extension_link=#{url}
+	</select>
+	
+	<select id="findExtensionsByPage" resultMap="extensionMap">
+		SELECT * FROM extension a LEFT JOIN website b ON a.website_id=b.id limit #{start},${pageSize}
+	</select>
+	<select id="countExtensions" resultType="java.lang.Integer">
+		select count(*) from extension
+	</select>
+	
+	
+	<select id="findExtensionsByPageAndState" resultMap="extensionMap">
+		SELECT * FROM extension a LEFT JOIN website b 
+			ON a.website_id=b.id 
+			where a.state=#{state} 
+		<if test="channel_id != null and channel_id neq ''">
+			and a.channel_id=#{channel_id}
+		</if>
+			limit #{start},${pageSize}
+	</select>
+	<select id="countExtensionsByState" resultType="java.lang.Integer">
+		select count(*) from extension where state=#{state}
+		<if test="channel_id != null and channel_id neq ''">
+			and channel_id=#{channel_id}
+		</if>
+	</select>
+	
+	<select id="getExtensionById" parameterType="java.lang.Integer" resultType="com.jybb.pojo.Extension">
+		select * from extension where id=#{extension_id}
+	</select>
+
+	
+	<select id="getWebsites" resultType="com.jybb.pojo.Website">
+		select * from website
+	</select>
+	
+	<select id="getWebsite" parameterType="java.lang.Integer" resultType="com.jybb.pojo.Website">
+		select * from website where id=#{website_id}
+	</select>
+	
+	<select id="getLinks" parameterType="java.lang.Integer" resultType="com.jybb.pojo.SonLink">
+		select * from son_link where extension_id=#{extension_id}
+	</select>
+	
+	<insert id="addExtension" parameterType="com.jybb.pojo.Extension">
+		insert into extension(website_id,channel_id,channel_name,extension_link)
+			values(
+			#{website_id,jdbcType=INTEGER},
+			#{channel_id,jdbcType=VARCHAR},
+			#{channel_name,jdbcType=VARCHAR},
+			#{extension_link,jdbcType=VARCHAR}
+			)
+	</insert>
+	<insert id="addSonLink" parameterType="com.jybb.pojo.SonLink">
+		insert into son_link(link,extension_id)
+			values(
+			#{link,jdbcType=VARCHAR},
+			#{extension_id,jdbcType=INTEGER}
+			)
+	</insert>
+	
+	<update id="updateWebsiteState" parameterType="com.jybb.pojo.Extension">
+		update extension set 
+				state=#{state,jdbcType=INTEGER},
+				<if test="state==0">
+					disable_time=#{disable_time,jdbcType=TIMESTAMP}
+				</if>
+				<if test="state==1">
+					enable_time=#{enable_time,jdbcType=TIMESTAMP}
+				</if>
+			  where
+			  	id=#{id,jdbcType=INTEGER}
+	</update>
+	
+	<update id="updateExtension" parameterType="com.jybb.pojo.Extension">
+		update extension set 
+			website_id=#{website_id,jdbcType=INTEGER},
+			channel_id=#{channel_id,jdbcType=VARCHAR},
+			channel_name=#{channel_name,jdbcType=VARCHAR},
+			extension_link=#{extension_link,jdbcType=VARCHAR}
+		where id=#{id,jdbcType=INTEGER}
+	</update>
+	
+	<update id="updateExtensionSonCount1" parameterType="java.lang.Integer">
+		update extension set son_count=son_count+1 where id=#{extension_id}
+	</update>
+	<update id="updateExtensionSonCount2" parameterType="java.lang.Integer">
+		update extension set son_count=son_count-1 where id=#{extension_id}
+	</update>
+	
+	<delete id="deleteSonLink" parameterType="java.lang.Integer">
+		delete from son_link where id=#{id}
+	</delete>
+	
+	<delete id="deleteSonLinkByExtensionId" parameterType="java.lang.Integer">
+		delete from son_link where extension_id=#{extension_id}
+	</delete>
+	
+	<delete id="deleteExtension" parameterType="java.lang.Integer">
+		delete from extension where id=#{id}
+	</delete>
+	
+</mapper>

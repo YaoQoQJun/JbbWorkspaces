@@ -1,0 +1,39 @@
+﻿@font-face {
+  font-family: 'iconfont';
+  src: url('//at.alicdn.com/t/font_1465188371_183609.eot'); /* IE9*/
+  src: url('//at.alicdn.com/t/font_1465188371_183609.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('//at.alicdn.com/t/font_1465188371_183609.woff') format('woff'), /* chrome、firefox */
+  url('//at.alicdn.com/t/font_1465188371_183609.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('//at.alicdn.com/t/font_1465188371_183609.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.icon-600:before{ content: "\e600"; } /*点餐*/
+.icon-601:before{ content: "\e601"; } /*刷新*/
+.icon-602:before{ content: "\e602"; } /*外卖*/
+.icon-603:before{ content: "\e603"; } /*账单*/
+.icon-604:before{ content: "\e604"; } /*营业额*/
+.icon-605:before{ content: "\e605"; } /*向下箭头*/
+.icon-606:before{ content: "\e606"; } /*关闭*/
+.icon-607:before{ content: "\e607"; } /*购物车*/
+.icon-608:before{ content: "\e608"; } /*设置*/
+.icon-609:before{ content: "\e609"; } /*电话预定*/
+.icon-610:before{ content: "\e610"; } /*修改*/
+.icon-611:before{ content: "\e611"; } /*删除*/
+.icon-612:before{ content: "\e612"; } /*编辑(铅笔)*/
+.icon-613:before{ content: "\e613"; } /*下拉向下*/
+.icon-614:before{ content: "\e614"; } /*添加*/
+.icon-615:before{ content: "\e615"; } /*返回*/
+.icon-616:before{ content: "\e616"; } /*上传图片*/
+.icon-617:before{ content: "\e617"; } /*问号*/
+.icon-618:before{ content: "\e618"; } /*日历*/
+.icon-619:before{ content: "\e619"; } /*预订*/
+.icon-60a:before{ content: "\e60a"; } /*并单*/
+.icon-60b:before{ content: "\e60b"; } /*换桌*/
+.icon-60c:before{ content: "\e60c"; } /*退桌*/
+.icon-60d:before{ content: "\e60d"; } /*显示信息*/
+.icon-60e:before{ content: "\e60e"; } /*箭头返回*/
+.icon-60f:before{ content: "\e60f"; } /*返回另*/
+.icon-61a:before{ content: "\e61a"; } /*已预订桌位*/
+.icon-61b:before{ content: "\e61b"; } /*顶部左侧表格切换*/
+.icon-61c:before{ content: "\e61c"; } /*快餐小吃*/
+.icon-61d:before{ content: "\e61d"; } /*公众号二维码*/

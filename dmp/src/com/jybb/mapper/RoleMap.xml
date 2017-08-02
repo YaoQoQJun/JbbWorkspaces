@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.jybb.mapper.RoleMapper">
+	
+	
+	<select id="findAll" resultType="com.jybb.pojo.Role">
+		select * from role limit #{start},#{number}
+	</select>
+	
+	<select id="findRoleByRoleName" resultType="com.jybb.pojo.Role">
+		select * from role where role_name=#{role_name}
+		<if test="role_id != null and role_id neq ''">
+			and id!=#{role_id}
+		</if>
+	</select>
+	
+	<select id="getRoles" resultType="com.jybb.pojo.Role">
+		select * from role
+	</select>
+	
+	<select id="getRolesByAdminId" parameterType="java.lang.Integer" resultType="com.jybb.pojo.Role" >
+		SELECT c.`id`,c.`role_name` 
+		FROM admin a 
+		LEFT JOIN admin_role b 
+		ON a.`id`=b.`admin_id` 
+		LEFT JOIN role c 
+		ON b.`role_id`=c.`id` 
+		WHERE a.`id`=#{admin_id}
+		
+	</select>
+	
+	<select id="countRole" resultType="java.lang.Integer">
+		select count(*) from role
+	</select>
+	
+	<update id="updateRole">
+		update role set role_name=#{role_name} where id=#{role_id}
+	</update>
+	
+	<delete id="deleteRoleById" parameterType="java.lang.Integer">
+		delete from role where id=#{role_id}
+	</delete>
+	
+	<delete id="deleteRolePrivilegeModelByRoleId" parameterType="java.lang.Integer">
+		DELETE FROM role_privilege_model WHERE role_id=#{role_id}
+	</delete>
+	
+	<select id="getModels" resultType="com.jybb.pojo.Model">
+		select * from model
+	</select>
+	
+	<select id="getPrivilegeNamesByRoleId" resultType="java.lang.String">
+		SELECT e.`privilege_name` FROM role a 
+		LEFT JOIN role_privilege_model b 
+		ON a.`id`=b.`role_id` 
+		LEFT JOIN privilege_model c
+		ON b.`privilege_model_id`=c.`id`
+		LEFT JOIN model d
+		ON c.`model_id`=d.`id` 
+		LEFT JOIN privilege e
+		ON c.`privilege_id`=e.`id`
+		WHERE a.`id`=#{role_id} AND d.`id`=#{model_id}
+	</select>
+	
+	<select id="getModelsByRoleId" parameterType="java.lang.Integer" resultType="com.jybb.pojo.Model">
+		SELECT d.id,d.`model_name`,d.`model_url` FROM role a 
+		LEFT JOIN role_privilege_model b 
+		ON a.`id`=b.`role_id` 
+		LEFT JOIN privilege_model c
+		ON b.`privilege_model_id`=c.`id`
+		LEFT JOIN model d
+		ON c.`model_id`=d.`id` WHERE a.`id`=#{role_id} GROUP BY d.`id`
+	</select>
+	
+	<select id="getPrivilegeNames" parameterType="java.lang.Integer" resultType="java.lang.String">
+		SELECT c.privilege_name FROM model a 
+			LEFT JOIN privilege_model b ON a.`id`=b.`model_id` 
+			LEFT JOIN privilege c ON b.`privilege_id`=c.`id` 
+			WHERE b.`model_id`=#{model_id}
+	</select>
+	
+	<insert id="addRole" parameterType="com.jybb.pojo.Role" useGeneratedKeys="true" keyProperty="id">
+		insert into role(role_name) values(#{role_name,jdbcType=VARCHAR})
+	</insert>
+	
+	<insert id="addRolePrivilegeModel">
+		insert into role_privilege_model(role_id,privilege_model_id)
+		values(
+		#{role_id,jdbcType=INTEGER},
+		#{privilege_model_id,jdbcType=INTEGER})
+	</insert>
+	
+	<select id="getPrivilegeModelId" resultType="java.lang.Integer">
+		SELECT * FROM 
+			privilege_model a 
+		LEFT JOIN model b ON a.`model_id`=b.`id` 
+		LEFT JOIN privilege c ON a.`privilege_id`=c.`id` 
+		WHERE b.model_name=#{model_name} AND c.`privilege_name`=#{privilege_name}
+	</select>
+ 	
+</mapper>

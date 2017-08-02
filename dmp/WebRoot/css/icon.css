@@ -1,0 +1,32 @@
+@font-face {
+  font-family: 'iconfont';
+  src: url('//at.alicdn.com/t/font_1471246820_0694468.eot'); /* IE9*/
+  src: url('//at.alicdn.com/t/font_1471246820_0694468.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('//at.alicdn.com/t/font_1471246820_0694468.woff') format('woff'), /* chrome、firefox */
+  url('//at.alicdn.com/t/font_1471246820_0694468.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('//at.alicdn.com/t/font_1471246820_0694468.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
+                    
+
+.icon-600:before{ content: "\e600"; } /*向上*/
+.icon-601:before{ content: "\e601"; } /*向下*/
+.icon-602:before{ content: "\e602"; } /*主页*/
+.icon-603:before{ content: "\e603"; } /*关闭*/
+.icon-604:before{ content: "\e604"; } /*回收站*/
+.icon-605:before{ content: "\e605"; } /*更多*/
+.icon-606:before{ content: "\e606"; } /*问号*/
+.icon-607:before{ content: "\e607"; } /*添加*/
+.icon-608:before{ content: "\e608"; } /*上传图片*/
+.icon-609:before{ content: "\e609"; } /*下拉向下*/
+.icon-610:before{ content: "\e610"; } /*刷新*/
+.icon-611:before{ content: "\e611"; } /*日历*/
+.icon-612:before{ content: "\e612"; } /*监控*/
+.icon-613:before{ content: "\e613"; } /*保存*/
+.icon-615:before{ content: "\e615"; } /*锁*/
+.icon-616:before{ content: "\e616"; } /*钥匙*/
+.icon-60a:before{ content: "\e60a"; } /*编辑*/
+.icon-60b:before{ content: "\e60b"; } /*返回*/
+.icon-60c:before{ content: "\e60c"; } /*系统*/
+.icon-60d:before{ content: "\e60d"; } /*管理*/
+.icon-60e:before{ content: "\e60e"; } /*推广*/
+.icon-60f:before{ content: "\e60f"; } /*统计*/

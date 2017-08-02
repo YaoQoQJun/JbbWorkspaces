@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.jybb.mapper.ModelMapper">
+	
+	<select id="findAll" resultType="com.jybb.pojo.Model">
+		select * from model limit #{start},#{number}
+	</select>
+	
+	<select id="countModel" resultType="java.lang.Integer">
+		select count(*) from model
+	</select>
+	
+	<select id="getPrivilegeModelIds" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT id FROM privilege_model WHERE model_id=#{model_id}
+	</select>
+	
+	<select id="findPrivilegeIdByPrivilegeName" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT id FROM privilege WHERE privilege_name=#{privilege_name}
+	</select>
+	
+	<select id="getPrivilegeModelIdByModelIdAndPrivilegeId" resultType="java.lang.Integer">
+		SELECT id FROM privilege_model WHERE model_id=#{model_id} AND privilege_id=#{privilege_id};
+	</select>
+	
+	<delete id="deleteRolePrivilegeModelByPrivilegeModelIds" parameterType="java.lang.Integer">
+		DELETE FROM role_privilege_model  WHERE privilege_model_id=#{privilege_model_id}
+	</delete>
+	
+	<delete id="deleteModelPrivilegeByModelIdAndPrivilegeId">
+		DELETE FROM privilege_model WHERE model_id=#{model_id} AND privilege_id=#{privilege_id}
+	</delete>
+	
+	<select id="getPrivileges" parameterType="java.lang.Integer" resultType="java.lang.String">
+		SELECT b.`privilege_name` FROM 
+			privilege_model a 
+		LEFT JOIN 
+			privilege b 
+		ON 
+			a.`privilege_id`=b.`id` 
+		WHERE a.model_id=#{model_id}
+	</select>
+	
+	<update id="updateModel" parameterType="com.jybb.pojo.Model">
+		update model set 
+			model_name=#{model_name,jdbcType=VARCHAR},
+			model_url=#{model_url,jdbcType=VARCHAR}
+		where id=#{id}
+	</update>
+	
+	<delete id="deleteModelPrivilege" parameterType="java.lang.Integer">
+		delete from privilege_model where model_id=#{model_id}
+	</delete>
+	
+	<delete id="deleteModel" parameterType="java.lang.Integer">
+		delete from model where id=#{model_id}
+	</delete>
+	
+	<insert id="addModel" parameterType="com.jybb.pojo.Model" useGeneratedKeys="true" keyProperty="id">
+		insert into model(model_name,model_url) 
+			values(
+			#{model_name,jdbcType=VARCHAR},
+			#{model_url,jdbcType=VARCHAR}
+			)
+	</insert>
+	
+	<insert id="addModelPrivilege">
+		insert into privilege_model(model_id,privilege_id) 
+			values(
+			#{model_id,jdbcType=INTEGER},
+			#{privilege_id,jdbcType=INTEGER}
+			)
+	</insert>
+ 	
+</mapper>

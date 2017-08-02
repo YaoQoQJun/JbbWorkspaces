@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.jybb.mapper.DataUVMapper">
+	<select id="getSysData" resultType="java.util.Map" >
+		select IFNULL(j_sys,'Unknow') j_sys,count(j_sys) as count from `${tableName}` where j_url like '${extension_link}%' and ctime&gt;#{start} and ctime&lt;#{end} group by j_sys
+	</select>
+	
+	<select id="getJ_languageData" resultType="java.util.Map" >
+		select IFNULL(j_language,'Unknow') j_language,count(j_language) as count from `${tableName}` where j_url like '${extension_link}%' and ctime&gt;#{start} and ctime&lt;#{end} group by j_language
+	</select>
+	
+	<select id="getBroserData" resultType="java.util.Map" >
+		select IFNULL(j_broser,'Unknow') j_broser,count(j_broser) as count from `${tableName}` where j_url like '${extension_link}%'  and ctime&gt;#{start} and ctime&lt;#{end} group by j_broser
+	</select>
+	
+	<select id="getJ_color_depthData" resultType="java.util.Map" >
+		select IFNULL(j_color_depth,'Unknow') j_color_depth,count(j_color_depth) as count from `${tableName}` where j_url like '${extension_link}%'  and ctime&gt;#{start} and ctime&lt;#{end} group by j_color_depth
+	</select>
+	
+	<select id="getJ_resolutionData" resultType="java.util.Map" >
+		select IFNULL(j_resolution,'Unknow') j_resolution,count(j_resolution) as count from `${tableName}` where j_url like '${extension_link}%'  and ctime&gt;#{start} and ctime&lt;#{end} group by j_resolution
+	</select>
+	
+	<select id="getJ_has_lied_browserData" resultType="java.util.Map" >
+		select 
+			IF(IFNULL(j_has_lied_browser,true),'假','真') as j_has_lied_browser,
+			count(IF(IFNULL(j_has_lied_browser,true),'假','真') ) as count  
+		from `${tableName}` where j_url like '${extension_link}%'  and ctime&gt;#{start} and ctime&lt;#{end} group by j_has_lied_browser
+	</select>
+	
+	<select id="getJ_has_lied_languagesData" resultType="java.util.Map" >
+		select 
+			IF(IFNULL(j_has_lied_languages,true),'假','真') as j_has_lied_languages,
+			count(IF(IFNULL(j_has_lied_languages,true),'假','真') ) as count  
+		from `${tableName}` where j_url like '${extension_link}%'  and ctime&gt;#{start} and ctime&lt;#{end} group by j_has_lied_languages
+	</select>
+	
+	<select id="getJ_has_lied_osData" resultType="java.util.Map" >
+		select 
+			IF(IFNULL(j_has_lied_os,true),'假','真') as j_has_lied_os,
+			count(IF(IFNULL(j_has_lied_os,true),'假','真') ) as count  
+		from `${tableName}` where j_url like '${extension_link}%'  and ctime&gt;#{start} and ctime&lt;#{end} group by j_has_lied_os
+	</select>
+	
+	<select id="getJ_has_lied_resolutionData" resultType="java.util.Map" >
+		select 
+			IF(IFNULL(j_has_lied_resolution,true),'假','真') as j_has_lied_resolution,
+			count(IF(IFNULL(j_has_lied_resolution,true),'假','真') ) as count  
+		from `${tableName}` where j_url like '${extension_link}%'  and ctime&gt;#{start} and ctime&lt;#{end} group by j_has_lied_resolution
+	</select>
+	
+	<select id="getProvinceData" resultType="java.util.Map" >
+		select IFNULL(province,'Unknow') province,count(province) as count from `${tableName}` where j_url like '${extension_link}%'  and ctime&gt;#{start} and ctime&lt;#{end} group by province
+	</select>
+	
+	
+	<select id="getSysLinkData" resultType="java.util.Map" >
+		select IFNULL(j_sys,'Unknow') j_sys,count(j_sys) as count from `${tableName}` where j_url=#{extension_link} and ctime&gt;#{start} and ctime&lt;#{end} group by j_sys
+	</select>
+	
+	<select id="getJ_languageLinkData" resultType="java.util.Map" >
+		select IFNULL(j_language,'Unknow') j_language,count(j_language) as count from `${tableName}` where j_url=#{extension_link}  and ctime&gt;#{start} and ctime&lt;#{end} group by j_language
+	</select>
+	
+	<select id="getBroserLinkData" resultType="java.util.Map" >
+		select IFNULL(j_broser,'Unknow') j_broser,count(j_broser) as count from `${tableName}` where j_url=#{extension_link} and ctime&gt;#{start} and ctime&lt;#{end} group by j_broser
+	</select>
+	
+	<select id="getJ_color_depthLinkData" resultType="java.util.Map" >
+		select IFNULL(j_color_depth,'Unknow') j_color_depth,count(j_color_depth) as count from `${tableName}` where j_url=#{extension_link} and ctime&gt;#{start} and ctime&lt;#{end} group by j_color_depth
+	</select>
+	
+	<select id="getJ_resolutionLinkData" resultType="java.util.Map" >
+		select IFNULL(j_resolution,'Unknow') j_resolution,count(j_resolution) as count from `${tableName}` where j_url=#{extension_link} and ctime&gt;#{start} and ctime&lt;#{end} group by j_resolution
+	</select>
+	
+	<select id="getJ_has_lied_browserLinkData" resultType="java.util.Map" >
+		select 
+			IF(IFNULL(j_has_lied_browser,true),'假','真') as j_has_lied_browser,
+			count(IF(IFNULL(j_has_lied_browser,true),'假','真') ) as count  
+		from `${tableName}` where j_url=#{extension_link}  and ctime&gt;#{start} and ctime&lt;#{end} group by j_has_lied_browser
+	</select>
+	
+	<select id="getJ_has_lied_languagesLinkData" resultType="java.util.Map" >
+		select 
+			IF(IFNULL(j_has_lied_languages,true),'假','真') as j_has_lied_languages,
+			count(IF(IFNULL(j_has_lied_languages,true),'假','真') ) as count  
+		from `${tableName}` where j_url=#{extension_link}  and ctime&gt;#{start} and ctime&lt;#{end} group by j_has_lied_languages
+	</select>
+	
+	<select id="getJ_has_lied_osLinkData" resultType="java.util.Map" >
+		select 
+			IF(IFNULL(j_has_lied_os,true),'假','真') as j_has_lied_os,
+			count(IF(IFNULL(j_has_lied_os,true),'假','真') ) as count  
+		from `${tableName}` where j_url=#{extension_link} and ctime&gt;#{start} and ctime&lt;#{end} group by j_has_lied_os
+	</select>
+	
+	<select id="getJ_has_lied_resolutionLinkData" resultType="java.util.Map" >
+		select 
+			IF(IFNULL(j_has_lied_resolution,true),'假','真') as j_has_lied_resolution,
+			count(IF(IFNULL(j_has_lied_resolution,true),'假','真') ) as count  
+		from `${tableName}` where j_url=#{extension_link} and ctime&gt;#{start} and ctime&lt;#{end} group by j_has_lied_resolution
+	</select>
+	
+	<select id="getProvinceLinkData" resultType="java.util.Map" >
+		select IFNULL(province,'Unknow') province,count(province) as count from `${tableName}` where j_url=#{extension_link} and ctime&gt;#{start} and ctime&lt;#{end} group by province
+	</select>
+	
+	
+</mapper>

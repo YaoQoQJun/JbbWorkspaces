@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.jybb.membersMapper.MemberMapper">
+	<select id="countReg" resultType="java.lang.Integer">
+		select count(*) from uct1_0_members where regfrom=#{regfrom} and regdate &gt;= #{start} and regdate &lt; #{end}
+	</select>
+	
+	<select id="countAllReg" resultType="java.lang.Integer">
+		select count(*) from uct1_0_members
+	</select>
+	
+	<select id="countAllPcWapAppReg" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select count(*) from uct1_0_members where regfrom=#{regfrom}
+	</select>
+	
+	<select id="getSexData" resultType="java.util.Map" >
+		select cast(sex as signed) as sex,count(sex) as count 
+		from uct1_0_members 
+		where regdate&gt;=#{startDate} and regdate&lt;#{endDate} 
+		<choose>
+			<when test='regfrom == "0"'></when>
+			<when test='regfrom == "app"'>
+				and regfrom='android' or regfrom='ios'
+			</when>
+			<otherwise>
+				and regfrom=#{regfrom}
+			</otherwise>
+		</choose>
+		group by sex
+	</select>
+	
+	<select id="getAgeData" resultType="java.lang.Integer" >
+		select 
+			(year(now())-year(concat(birthyear,"-",birthmonth,"-",birthday))-1)+(date_format(concat(birthyear,"-",birthmonth,"-",birthday), "%m%d") &lt;= date_format(now(), "%m%d")) as age 
+		from uct1_0_members 
+		where regdate&gt;=#{startDate} and regdate&lt;#{endDate}
+		<choose>
+			<when test='regfrom == "0"'></when>
+			<when test='regfrom == "app"'>
+				and regfrom='android' or regfrom='ios'
+			</when>
+			<otherwise>
+				and regfrom=#{regfrom}
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getLocalData" resultType="java.util.Map" >
+		select ifnull(b.name,'未填写')  as province,count(a.uid) as count 
+		from uct1_0_members a left join uct1_0_district b on a.areaprovince=b.id 
+		where regdate&gt;=#{startDate} and regdate&lt;#{endDate}
+		<choose>
+			<when test='regfrom == "0"'></when>
+			<when test='regfrom == "app"'>
+				and regfrom='android' or regfrom='ios'
+			</when>
+			<otherwise>
+				and regfrom=#{regfrom}
+			</otherwise>
+		</choose>
+		group by b.name
+	</select>
+	
+	<select id="getStateData" resultType="java.util.Map" >
+		select cast(ifnull(c.state,0) as signed) as state,count(ifnull(c.state,'未填写')) as count 
+		from uct1_0_members a left join (SELECT b.uid,b.state,max(b.addtime) FROM uct1_0_members_baby b group by b.uid) c on a.uid=c.uid
+		where regdate&gt;=#{startDate} and regdate&lt;#{endDate}
+		<choose>
+			<when test='regfrom == "0"'></when>
+			<when test='regfrom == "app"'>
+				and a.regfrom='android' or a.regfrom='ios'
+			</when>
+			<otherwise>
+				and a.regfrom=#{regfrom}
+			</otherwise>
+		</choose>
+		group by c.state
+	</select>
+	
+	<select id="getPregnancyDatas" resultType="java.lang.String" >
+		select ifnull(concat(b.year,"-",b.month,"-",b.day),0) as date 
+		from uct1_0_members a left join uct1_0_members_baby b on a.uid=b.uid 
+		where b.state=2 and regdate&gt;=#{startDate} and regdate&lt;#{endDate}
+		<choose>
+			<when test='regfrom == "0"'></when>
+			<when test='regfrom == "app"'>
+				and a.regfrom='android' or a.regfrom='ios'
+			</when>
+			<otherwise>
+				and a.regfrom=#{regfrom}
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getBabyAgeDatas" resultType="java.lang.String" >
+		select ifnull(concat(b.year,"-",b.month,"-",b.day),0) as date 
+		from uct1_0_members a left join uct1_0_members_baby b on a.uid=b.uid 
+		where b.state=3 and regdate&gt;=#{startDate} and regdate&lt;#{endDate}
+		<choose>
+			<when test='regfrom == "0"'></when>
+			<when test='regfrom == "app"'>
+				and a.regfrom='android' or a.regfrom='ios'
+			</when>
+			<otherwise>
+				and a.regfrom=#{regfrom}
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+</mapper>

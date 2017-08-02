@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.jybb.mapper.DataItemMapper">
+	
+	<select id="findAll" parameterType="java.lang.Integer" resultType="com.jybb.pojo.DataItem">
+		select * from data_item where state=#{state}
+	</select>
+	
+	<select id="getDatasByDataItemId" parameterType="java.lang.Integer" resultType="com.jybb.pojo.Data">
+		SELECT * FROM data WHERE data_item_id=#{data_item_id}
+	</select>
+	
+	<select id="getDataItemByDataItemId" parameterType="java.lang.Integer" resultType="com.jybb.pojo.DataItem">
+		select * from data_item where id=#{data_item_id}
+	</select>
+	
+	<select id="getDataById" parameterType="java.lang.Integer" resultType="com.jybb.pojo.Data">
+		select * from data where id=#{id}
+	</select>
+	
+	<insert id="addDataItem" parameterType="com.jybb.pojo.DataItem" useGeneratedKeys="true" keyProperty="id">
+		insert into data_item(data_item_name,hbase_name,exception_range,data_source,state)
+			values(
+				#{data_item_name,jdbcType=VARCHAR},
+				#{hbase_name,jdbcType=VARCHAR},
+				#{exception_range,jdbcType=FLOAT},
+				#{data_source,jdbcType=VARCHAR},
+				#{state,jdbcType=INTEGER}
+			)
+	</insert>
+	
+	<update id="updateDataItem" parameterType="com.jybb.pojo.DataItem">
+		update data_item set 
+			data_item_name=#{data_item_name,jdbcType=VARCHAR},
+			hbase_name=#{hbase_name,jdbcType=VARCHAR},
+			exception_range=#{exception_range,jdbcType=FLOAT},
+			data_source=#{data_source,jdbcType=VARCHAR}
+		where id=#{id}
+	</update>
+	
+	<update id="updateData" parameterType="com.jybb.pojo.Data">
+		update data set 
+			data_name=#{data_name,jdbcType=VARCHAR},
+			proportion=#{proportion,jdbcType=FLOAT}
+		where id=#{id,jdbcType=INTEGER}
+	</update>
+	
+	<insert id="addData" parameterType="com.jybb.pojo.Data" useGeneratedKeys="true" keyProperty="id">
+		insert into data(data_name,proportion,data_item_id)
+			values(
+				#{data_name,jdbcType=VARCHAR},
+				#{proportion,jdbcType=FLOAT},
+				#{data_item_id,jdbcType=INTEGER}
+			)
+	</insert>
+	
+	<delete id="deleteData" parameterType="java.lang.Integer">
+		delete from data where id=#{data_id}
+	</delete>
+	
+	<delete id="deleteDataItem" parameterType="java.lang.Integer">
+		delete from data_item where id=#{data_item_id}
+	</delete>	
+
+	<delete id="deleteDataByDataItemId" parameterType="java.lang.Integer">
+		delete from data where data_item_id=#{data_item_id}
+	</delete>
+</mapper>

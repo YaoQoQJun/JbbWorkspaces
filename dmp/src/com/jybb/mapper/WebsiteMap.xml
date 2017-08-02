@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.jybb.mapper.WebsiteMapper">
+	
+	<insert id="addWebsite" parameterType="com.jybb.pojo.Website">
+		insert into website(name,domain_name,code)
+			values(
+				#{name,jdbcType=VARCHAR},
+				#{domain_name,jdbcType=VARCHAR},
+				#{code,jdbcType=VARCHAR}
+			)
+	</insert>
+	
+	<update id="updateWebsite" parameterType="com.jybb.pojo.Website">
+		update website set 
+				name=#{name,jdbcType=VARCHAR},
+				domain_name=#{domain_name,jdbcType=VARCHAR},
+				code=#{code,jdbcType=VARCHAR}
+			  where
+			  	id=#{id,jdbcType=INTEGER}
+	</update>
+	
+	<update id="updateWebsiteState" parameterType="com.jybb.pojo.Website">
+		update website set 
+				state=#{state,jdbcType=INTEGER},
+				<if test="state==0">
+					disable_time=#{disable_time,jdbcType=TIMESTAMP}
+				</if>
+				<if test="state==1">
+					enable_time=#{enable_time,jdbcType=TIMESTAMP}
+				</if>
+			  where
+			  	id=#{id,jdbcType=INTEGER}
+	</update>
+	
+	<update id="updateExtensionState" parameterType="java.lang.Integer">
+		UPDATE extension SET state=0,disable_time=NOW() WHERE website_id=#{website_id}
+	</update>
+	
+	<delete id="deleteWebsite" parameterType="java.lang.Integer">
+		delete from website where id=#{id}
+	</delete>
+	
+	<select id="findWebsitesByPage" resultType="com.jybb.pojo.Website">
+		select * from website limit #{start},${pageSize}
+	</select>
+	
+	<select id="countWebsites" resultType="java.lang.Integer">
+		select count(*) from website
+	</select>
+	
+</mapper>

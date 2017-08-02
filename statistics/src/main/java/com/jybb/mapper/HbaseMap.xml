@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.jybb.mapper.HbaseMapper">
+
+	<select id="findAllUrl" resultType="java.lang.String">
+		select DISTINCT a.j_url from `${tableName}` a where a.ctime &gt;= #{time}
+	</select>
+	
+	<select id="findHbaseDetailByUrlAndTime" resultType="com.jybb.pojo.HbaseDetail">
+ 		select * from hbase_detail where url=#{url} and time=#{time}
+ 	</select>
+ 	
+ 	<select id="findHbaseDetail" parameterType="java.lang.Long" resultType="com.jybb.pojo.HbaseDetail">
+ 		select * from hbase_detail where time=#{time}
+ 	</select>
+ 	
+ 	<select id="getHbaseDetail_ats" resultType="java.lang.String">
+ 		select count_at from hbase_detail where url=#{url} and time=#{time}
+ 	</select>
+ 	
+ 	<select id="countIps" resultType="java.lang.String">
+ 		SELECT ip FROM `${tableName}` WHERE 1 and j_url=#{j_url} and ctime>=#{ctime} GROUP BY ip
+ 	</select>
+ 	
+ 	
+ 	<insert id="saveHbaseDetail" parameterType="com.jybb.pojo.HbaseDetail">
+ 		insert into hbase_detail values(
+ 			#{url,jdbcType=VARCHAR},
+ 			#{count_pv,jdbcType=INTEGER},
+ 			#{count_uv,jdbcType=INTEGER},
+ 			#{count_ip,jdbcType=INTEGER},
+ 			#{count_ov,jdbcType=DOUBLE},
+ 			#{count_at,jdbcType=INTEGER},
+ 			#{count_br,jdbcType=DOUBLE},
+ 			#{count_op,jdbcType=INTEGER},
+ 			#{time,jdbcType=INTEGER}
+ 		)
+ 	</insert>
+ 	
+ 	<update id="updateHbaseDetail" parameterType="com.jybb.pojo.HbaseDetail">
+ 		update hbase_detail 
+ 		set 
+ 			count_pv=#{count_pv,jdbcType=INTEGER},
+ 			count_uv=#{count_uv,jdbcType=INTEGER},
+ 			count_ip=#{count_ip,jdbcType=INTEGER},
+ 			count_ov=#{count_ov,jdbcType=DOUBLE},
+ 			count_at=#{count_at,jdbcType=INTEGER},
+ 			count_br=#{count_br,jdbcType=DOUBLE},
+ 			count_op=#{count_op,jdbcType=INTEGER}
+ 		where 
+ 			url=#{url,jdbcType=VARCHAR} and 
+ 			time=#{time,jdbcType=INTEGER}
+ 	</update>
+ 	
+	<update id="updateHbaseDetail_pvs">
+	 		update hbase_detail 
+	 		set 
+	 			count_pv=count_pv+1
+	 		where 
+	 			url=#{url,jdbcType=VARCHAR} and 
+	 			time=#{time,jdbcType=INTEGER}
+ 	</update>
+ 	
+ 	<update id="updateHbaseDetail_uvs">
+	 		update hbase_detail 
+	 		set 
+	 			count_uv=count_uv+1
+	 		where 
+	 			url=#{url,jdbcType=VARCHAR} and 
+	 			time=#{time,jdbcType=INTEGER}
+ 	</update>
+ 	
+ 	<update id="updateHbaseDetail_ips">
+	 		update hbase_detail 
+	 		set 
+	 			count_ip=#{count_ip,jdbcType=INTEGER}
+	 		where 
+	 			url=#{url,jdbcType=VARCHAR} and 
+	 			time=#{time,jdbcType=INTEGER}
+ 	</update>
+ 	
+ 	<update id="updateHbaseDetail_ats">
+	 		update hbase_detail 
+	 		set 
+	 			count_at=#{count_at,jdbcType=VARCHAR}
+	 		where 
+	 			url=#{url,jdbcType=VARCHAR} and 
+	 			time=#{time,jdbcType=INTEGER}
+ 	</update>
+ 	
+ 	<update id="updateHbaseDetail_op">
+	 		update hbase_detail 
+	 		set 
+	 			count_op=count_op+1
+	 		where 
+	 			url=#{url,jdbcType=VARCHAR} and 
+	 			time=#{time,jdbcType=INTEGER}
+ 	</update>
+ 	
+ 	
+ 	
+	<insert id="saveExtension" parameterType="com.jybb.pojo.HbaseExtension">
+		insert into hbase_extension(extension_id,extension_link,pv,uv,ip,start,end)
+		values(
+		#{extension_id,jdbcType=INTEGER},
+		#{extension_link,jdbcType=VARCHAR},
+		#{pv,jdbcType=INTEGER},
+		#{uv,jdbcType=INTEGER},
+		#{ip,jdbcType=INTEGER},
+		#{start,jdbcType=BIGINT},
+		#{end,jdbcType=BIGINT}
+		)
+	</insert>
+	<insert id="saveDisable" parameterType="com.jybb.pojo.HbaseDisable">
+		insert into hbase_disable(disable_id,disable_link,pv,uv,ip,start,end)
+		values(
+		#{disable_id,jdbcType=INTEGER},
+		#{disable_link,jdbcType=VARCHAR},
+		#{pv,jdbcType=INTEGER},
+		#{uv,jdbcType=INTEGER},
+		#{ip,jdbcType=INTEGER},
+		#{start,jdbcType=BIGINT},
+		#{end,jdbcType=BIGINT}
+		)
+	</insert>
+
+	<update id="createDataTable" parameterType="java.lang.String">
+		CREATE TABLE `${tableName}` (
+		`country` varchar(100) DEFAULT NULL,
+		`province` varchar(100) DEFAULT NULL,
+		`city` varchar(100) DEFAULT NULL,
+		`ctime` varchar(100) DEFAULT NULL,
+		`ip` varchar(100) DEFAULT NULL,
+		`j_broser` varchar(100) DEFAULT NULL,
+		`j_color_depth` varchar(100) DEFAULT NULL,
+		`j_has_lied_browser` varchar(100) DEFAULT NULL,
+		`j_has_lied_languages` varchar(100) DEFAULT NULL,
+		`j_has_lied_os` varchar(100) DEFAULT NULL,
+		`j_has_lied_resolution` varchar(100) DEFAULT NULL,
+		`j_language` varchar(100) DEFAULT NULL,
+		`j_resolution` varchar(100) DEFAULT NULL,
+		`j_sys` varchar(100) DEFAULT NULL,
+		`j_timezone_offset` varchar(100) DEFAULT NULL,
+		`j_referrer` text DEFAULT NULL,
+		`j_url` varchar(2000) DEFAULT NULL
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	</update>
+
+	<insert id="saveDatasMap" parameterType="map">
+		insert into `${tableName}`
+		(
+		country,
+		province,
+		city,
+		ctime,
+		ip,
+		j_broser,
+		j_color_depth,
+		j_has_lied_browser,
+		j_has_lied_languages,
+		j_has_lied_os,
+		j_has_lied_resolution,
+		j_language,
+		j_resolution,
+		j_sys,
+		j_timezone_offset,
+		j_referrer,
+		j_url
+		) values
+		(
+		#{country,jdbcType=VARCHAR},
+		#{province,jdbcType=VARCHAR},
+		#{city,jdbcType=VARCHAR},
+		#{ctime,jdbcType=VARCHAR},
+		#{ip,jdbcType=VARCHAR},
+		#{j_broser,jdbcType=VARCHAR},
+		#{j_color_depth,jdbcType=VARCHAR},
+		#{j_has_lied_browser,jdbcType=VARCHAR},
+		#{j_has_lied_languages,jdbcType=VARCHAR},
+		#{j_has_lied_os,jdbcType=VARCHAR},
+		#{j_has_lied_resolution,jdbcType=VARCHAR},
+		#{j_language,jdbcType=VARCHAR},
+		#{j_resolution,jdbcType=VARCHAR},
+		#{j_sys,jdbcType=VARCHAR},
+		#{j_timezone_offset,jdbcType=VARCHAR},
+		#{j_referrer,jdbcType=VARCHAR},
+		#{j_url,jdbcType=VARCHAR}
+		)
+	</insert>
+
+</mapper>

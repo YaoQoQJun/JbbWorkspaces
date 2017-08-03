@@ -961,3 +961,23 @@ ALTER TABLE `role_privilege_model`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+/*Hbase----Table*/;
+
+Table dmp_pv is ENABLED                                                                                                                              
+dmp_pv                                                                                                                                               
+COLUMN FAMILIES DESCRIPTION                                                                                                                          
+{NAME => 'user', DATA_BLOCK_ENCODING => 'NONE', BLOOMFILTER => 'ROW', REPLICATION_SCOPE => '0', VERSIONS => '1', COMPRESSION => 'NONE', MIN_VERSIONS 
+=> '0', TTL => 'FOREVER', KEEP_DELETED_CELLS => 'FALSE', BLOCKSIZE => '65536', IN_MEMORY => 'false', BLOCKCACHE => 'true'}
+
+Table dmp_uv is ENABLED                                                                                                                                                                                                                                                       
+dmp_uv                                                                                                                                                                                                                                                                        
+COLUMN FAMILIES DESCRIPTION                                                                                                                                                                                                                                                   
+{NAME => 'info', DATA_BLOCK_ENCODING => 'NONE', BLOOMFILTER => 'ROW', REPLICATION_SCOPE => '0', VERSIONS => '1', COMPRESSION => 'NONE', MIN_VERSIONS => '0', TTL => 'FOREVER', KEEP_DELETED_CELLS => 'FALSE', BLOCKSIZE => '65536', IN_MEMORY => 'false', BLOCKCACHE => 'true'
+}  
+
+Table points is ENABLED                                                                                                                                                                                                                                                       
+points                                                                                                                                                                                                                                                                        
+COLUMN FAMILIES DESCRIPTION                                                                                                                                                                                                                                                   
+{NAME => 'info', DATA_BLOCK_ENCODING => 'NONE', BLOOMFILTER => 'ROW', REPLICATION_SCOPE => '0', VERSIONS => '1', COMPRESSION => 'NONE', MIN_VERSIONS => '0', TTL => 'FOREVER', KEEP_DELETED_CELLS => 'FALSE', BLOCKSIZE => '65536', IN_MEMORY => 'false', BLOCKCACHE => 'true'
+} 

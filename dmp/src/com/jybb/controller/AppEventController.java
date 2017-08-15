@@ -68,7 +68,7 @@ public class AppEventController {
 	@Autowired
 	private AppEventSetMapper appEventSetMapper;
 	
-	private static final Integer PAGE_SIZE=7;
+	private static final Integer PAGE_SIZE=15;
 	
 	@RequestMapping("toAppEvent.do")
 	public ModelAndView toAppEvent(

@@ -118,22 +118,33 @@
 			
 		});
 		
+		$.ajax({
+			type:"post",
+			url:"appEventClass/getAppEventClasss.do",
+			async:false,
+			success:function(msg){
+				$("#selectEventClass").append("<option value='0'>全部分类</option>");
+				for (var int = 0; int < msg.length; int++) {
+					$("#selectEventClass").append("<option value='"+msg[int].id+"'>"+msg[int].app_event_class_name+"</option>");
+				}
+			}
+		});
 		
+		$("#selectEventClass").val('${app_event_class_id}');
 		$("#selectModel").val('${client_model}');
 		$("#selectChannel").val('${channel_name}');
 		$("#selectVersion").val('${app_version}');
-		
-		
 	});
 
 	var base = document.getElementsByTagName("base")[0].getAttribute("href");
 
 	function changeSelect(){
+		var app_event_class_id=$("#selectEventClass").val();
 		var client_model=$("#selectModel").val();
 		var channel_name=$("#selectChannel").val();
 		var app_version=$("#selectVersion").val();
 		var page=$("#page").val();
-		window.location.href=base+"appEvent/toAppEvent.do?"+"&page="+page+"&client_model="+client_model+"&channel_name="+channel_name+"&app_version="+app_version;
+		window.location.href=base+"appEvent/toAppEvent.do?"+"&page="+page+"&client_model="+client_model+"&channel_name="+channel_name+"&app_version="+app_version+"&app_event_class_id="+app_event_class_id;
 	}
 
 	function toDetailAppEvent(event_name,event_remark){
@@ -175,6 +186,12 @@
 				<option value="0">全部终端</option>
 				<option value="android">android</option>
 				<option value="ios">ios</option>
+			</select>
+		</div>
+		
+		<div class="fr" style=" border:1px solid rgba(0,0,0,.2); padding-left:6px; border-radius:3px; -webkit-border-radius:3px;margin-right: 30px;">
+			<i class="icon icon-614" style="margin-top:6px; float:left;"></i>
+			<select id="selectEventClass" style="width:200px; height:30px; padding:0 6px;border:0" onchange="changeSelect();">
 			</select>
 		</div>
 		

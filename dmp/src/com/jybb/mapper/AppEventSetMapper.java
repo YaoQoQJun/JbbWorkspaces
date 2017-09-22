@@ -1,6 +1,7 @@
 package com.jybb.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.dao.DataAccessException;
@@ -12,7 +13,7 @@ import com.jybb.pojo.AppEventSet;
 public interface AppEventSetMapper{
 	
 
-	List<AppEventSet> findAllByPage(
+	List<Map<String,String>> findAllByPage(
 			@Param("start")Integer start, 
 			@Param("pageSize")Integer pageSize)throws DataAccessException;
 
@@ -25,5 +26,9 @@ public interface AppEventSetMapper{
 	void deleteAppEventSet(@Param("id")Integer id)throws DataAccessException;
 
 	void updateAppEventSet(AppEventSet appEventSet)throws DataAccessException;
+
+	List<Map<String, String>> findAllByPageAndAppEventClassId(
+			@Param("app_event_class_id")Integer app_event_class_id, @Param("start")Integer start, @Param("pageSize")Integer pageSize);
+	Integer countByAppEventClassId(@Param("app_event_class_id")Integer app_event_class_id);
 
 }

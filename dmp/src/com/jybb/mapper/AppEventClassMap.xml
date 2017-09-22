@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.jybb.mapper.AppEventClassMapper">
+	
+	
+	<select id="findAll" resultType="com.jybb.pojo.AppEventClass">
+		select * from app_event_class
+	</select>
+	
+	<select id="findAllByPage" resultType="com.jybb.pojo.AppEventClass">
+		select * from app_event_class limit #{start},#{pageSize}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		select count(*) from app_event_class
+	</select>
+ 	
+ 	<insert id="addAppEventClass"  parameterType="com.jybb.pojo.AppEventClass">
+ 		insert into app_event_class(app_event_class_name) values(#{app_event_class_name,jdbcType=VARCHAR})
+ 	</insert>
+ 	
+ 	<update id="updateAppEventClass" parameterType="com.jybb.pojo.AppEventClass">
+ 		update app_event_class set 
+ 			app_event_class_name=#{app_event_class_name,jdbcType=VARCHAR}
+ 		where id=#{id,jdbcType=INTEGER}
+ 	</update>
+ 	
+ 	<delete id="deleteAppEventClass" parameterType="java.lang.Integer">
+ 		delete from app_event_class where id=#{id}
+ 	</delete>
+ 	
+ 	<select id="findAppEventClassByAppEventClassName" parameterType="java.lang.String" resultType="com.jybb.pojo.AppEventClass">
+ 		select * from app_event_class where app_event_class_name=#{app_event_class_name,jdbcType=VARCHAR} 
+ 		<if test="id != null and id neq ''">
+ 			and id!=#{id,jdbcType=INTEGER}
+ 		</if>
+ 	</select>
+ 	
+</mapper>

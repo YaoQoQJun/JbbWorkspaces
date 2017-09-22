@@ -54,7 +54,7 @@ public class AppEvetnSetController {
 		
 		Integer start=(page-1)*PAGE_SIZE;
 		
-		List<AppEventSet> appEventSets=appEventSetMapper.findAllByPage(start,PAGE_SIZE);
+		List<Map<String,String>> appEventSets=appEventSetMapper.findAllByPage(start,PAGE_SIZE);
 		Integer total=appEventSetMapper.count();
 		
 		Integer totalPage=total%PAGE_SIZE==0?total/PAGE_SIZE:total/PAGE_SIZE+1;
@@ -75,7 +75,8 @@ public class AppEvetnSetController {
 			HttpServletRequest request,
 			HttpServletResponse response,
 			String app_event_name,
-			String app_event_remark) throws Exception{
+			String app_event_remark,
+			Integer app_event_class_id) throws Exception{
 
 		try{
 			PrivilegeUtil.checkPriviege(session,request,response,"增加","事件设置");
@@ -83,6 +84,7 @@ public class AppEvetnSetController {
 			AppEventSet appEventSet=new AppEventSet();
 			appEventSet.setApp_event_name(app_event_name);
 			appEventSet.setApp_event_remark(app_event_remark);
+			appEventSet.setApp_event_class_id(app_event_class_id);
 			
 			appEventSetMapper.addAppEventSet(appEventSet);
 			
@@ -104,7 +106,8 @@ public class AppEvetnSetController {
 			HttpServletResponse response,
 			Integer id,
 			String app_event_name,
-			String app_event_remark) throws Exception{
+			String app_event_remark,
+			Integer app_event_class_id) throws Exception{
 		try{
 			PrivilegeUtil.checkPriviege(session,request,response,"修改","事件设置");
 			
@@ -112,6 +115,7 @@ public class AppEvetnSetController {
 			appEventSet.setId(id);
 			appEventSet.setApp_event_name(app_event_name);
 			appEventSet.setApp_event_remark(app_event_remark);
+			appEventSet.setApp_event_class_id(app_event_class_id);
 			
 			appEventSetMapper.updateAppEventSet(appEventSet);
 			

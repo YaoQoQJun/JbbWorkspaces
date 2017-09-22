@@ -178,10 +178,24 @@ $(function(){
 	
 	
 	function newAppEventSet(){
+		$("#save_app_event_class_id").empty();
 		$("#save_app_event_set_div").removeClass("display_none");
 		$("#save_app_event_set_error_msg").html("&nbsp;");
 		$("#save_app_event_name").val("");
 		$("#save_app_event_remark").val("");
+		
+		$.ajax({
+			type:"post",
+			url:"appEventClass/getAppEventClasss.do",
+			success:function(msg){
+				$("#save_app_event_class_id").append("<option value='0'>请选择</option>");
+				for (var int = 0; int < msg.length; int++) {
+					$("#save_app_event_class_id").append("<option value='"+msg[int].id+"'>"+msg[int].app_event_class_name+"</option>");
+				}
+			}
+		});
+		
+		$("#save_app_event_class_id").val("0");
 	}
 	
 	function saveAppEventSet(){
@@ -195,13 +209,19 @@ $(function(){
 		
 		var app_event_name=$("#save_app_event_name").val();
 		var app_event_remark=$("#save_app_event_remark").val();
+		var app_event_class_id=$("#save_app_event_class_id").val();
+		
+		if(app_event_class_id=="0"){
+			$("#save_app_event_set_error_msg").text("请选择事件分类！");
+			return false;
+		}
 		
 		$("#saveAppEventSet_button").attr("disabled",true);
 		$.ajax({
 			type:"post",
 			url:"appEventSet/addAppEventSet.do",
 			traditional: true,
-			data:{"app_event_name":app_event_name,"app_event_remark":app_event_remark},
+			data:{"app_event_name":app_event_name,"app_event_remark":app_event_remark,"app_event_class_id":app_event_class_id},
 			success:function(msg){
 				if (msg){
 					$("#save_app_event_set_error_msg").text("添加成功！");
@@ -219,14 +239,28 @@ $(function(){
 	}
 	
 	var updateId=null;
-	function editAppEventSet(id,app_event_name,app_event_remark){
+	function editAppEventSet(id,app_event_name,app_event_remark,app_event_class_id){
 		updateId=id;
-		
+		$("#update_app_event_class_id").empty();
 		$("#update_app_event_set_div").removeClass("display_none");
 		$("#update_app_event_set_error_msg").html("&nbsp;");
 		
+		$.ajax({
+			type:"post",
+			url:"appEventClass/getAppEventClasss.do",
+			async:false,
+			success:function(msg){
+				$("#update_app_event_class_id").append("<option value='0'>请选择</option>");
+				for (var int = 0; int < msg.length; int++) {
+					$("#update_app_event_class_id").append("<option value='"+msg[int].id+"'>"+msg[int].app_event_class_name+"</option>");
+				}
+			}
+		});
+		
+		$("#update_app_event_class_id").val(app_event_class_id);
 		$("#update_app_event_name").val(app_event_name);
 		$("#update_app_event_remark").val(app_event_remark);
+		
 	}
 	
 	function updateAppEventSet(){
@@ -237,11 +271,18 @@ $(function(){
 		
 		var app_event_name=$("#update_app_event_name").val();
 		var app_event_remark=$("#update_app_event_remark").val();
+		var app_event_class_id=$("#update_app_event_class_id").val();
+		
+		if(app_event_class_id=="0"){
+			$("#update_app_event_set_error_msg").text("请选择事件分类！");
+			return false;
+		}
+		
 		$.ajax({
 			type:"post",
 			url:"appEventSet/updateAppEventSet.do",
 			traditional: true,
-			data:{"id":updateId,"app_event_name":app_event_name,"app_event_remark":app_event_remark},
+			data:{"id":updateId,"app_event_name":app_event_name,"app_event_remark":app_event_remark,"app_event_class_id":app_event_class_id},
 			success:function(msg){
 				if (msg){
 					$("#update_app_event_set_error_msg").text("修改成功！");
@@ -315,8 +356,9 @@ $(function(){
 			<thead>
 				<tr>
 					<th style="width: 20%">序号</th>
-					<th style="width: 30%">事件名称</th>
-					<th style="width: 30%">事件备注</th>
+					<th style="width: 20%">事件名称</th>
+					<th style="width: 20%">事件备注</th>
+					<th style="width: 20%">事件分类</th>
 					<th style="width: 20%">操作</th>
 				</tr>
 			</thead>
@@ -326,9 +368,10 @@ $(function(){
 						<td>${appEventSet.id}</td>
 						<td>${appEventSet.app_event_name}</td>
 						<td>${appEventSet.app_event_remark}</td>
+						<td>${appEventSet.app_event_class_name}</td>
 						<td>
 							<cc:ps privileges="${privileges}" privilege="修改,事件设置">
-							<a class="sckre" onclick="editAppEventSet(${appEventSet.id},'${appEventSet.app_event_name}','${appEventSet.app_event_remark}');">
+							<a class="sckre" onclick="editAppEventSet(${appEventSet.id},'${appEventSet.app_event_name}','${appEventSet.app_event_remark}','${appEventSet.app_event_class_id}');">
 								<i class="icon icon-60a"></i>修改
 							</a>
 							</cc:ps>
@@ -411,12 +454,20 @@ $(function(){
                     <input id="save_app_event_remark" name="save_app_event_remark" type="text" class="txtput fz15" placeholder="事件备注" />
                 </div>
                 
+                <div class="centMain pt15">事件分类</div>
+                <div class="centMain pt5">
+                	<select id="save_app_event_class_id" name="app_event_class_id" class="txtput fz15">
+                	
+                	</select>
+                </div>
+                
                 <div class="centMain pt20 mt10">
                     <div class="w85 fl">
                         <button id="saveAppEventSet_button" class="btn" onclick="saveAppEventSet();">确认</button>
                     </div>
                     <div class="w65 fr"><button id="save_app_event_seet_close_button" class="btn btn_colose" onclick="Btn_Close(this)">关闭</button></div>
                 </div>
+                
             </div>
         </div>
     </div>
@@ -438,6 +489,13 @@ $(function(){
                 <div class="centMain pt15">事件备注</div>
                 <div class="centMain pt5">
                     <input id="update_app_event_remark" name="update_app_event_remark" type="text" class="txtput fz15" placeholder="事件备注" />
+                </div>
+                
+                <div class="centMain pt15">事件分类</div>
+                <div class="centMain pt5">
+                	<select id="update_app_event_class_id" name="app_event_class_id" class="txtput fz15">
+                	
+                	</select>
                 </div>
                 
                 <div class="centMain pt20 mt10">

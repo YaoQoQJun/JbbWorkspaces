@@ -10,6 +10,7 @@ public class AppEventSet {
 	private Integer id;
 	private String app_event_name;
 	private String app_event_remark;
+	private Integer app_event_class_id;
 	
 	
 	public Integer getId() {
@@ -30,5 +31,10 @@ public class AppEventSet {
 	public void setApp_event_remark(String app_event_remark) {
 		this.app_event_remark = app_event_remark;
 	}
-	
+	public Integer getApp_event_class_id() {
+		return app_event_class_id;
+	}
+	public void setApp_event_class_id(Integer app_event_class_id) {
+		this.app_event_class_id = app_event_class_id;
+	}
 }

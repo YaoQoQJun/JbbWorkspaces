@@ -3,12 +3,36 @@
  "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 <mapper namespace="com.jybb.mapper.AppEventSetMapper">
 	
-	<select id="findAllByPage" resultType="com.jybb.pojo.AppEventSet">
-		select * from app_event_set limit #{start},#{pageSize}
+	<select id="findAllByPage" resultType="java.util.Map">
+	
+		select 
+			a.id,
+			a.app_event_name,
+			a.app_event_remark,
+			a.app_event_class_id,
+			b.app_event_class_name 
+		from app_event_set a left join app_event_class b on a.app_event_class_id=b.id limit #{start},#{pageSize}
+		
 	</select>
 	
 	<select id="count" resultType="java.lang.Integer">
 		select count(*) from app_event_set
+	</select>
+		
+	<select id="findAllByPageAndAppEventClassId" resultType="java.util.Map">
+	
+		select 
+			a.id,
+			a.app_event_name,
+			a.app_event_remark,
+			a.app_event_class_id,
+			b.app_event_class_name 
+		from app_event_set a left join app_event_class b on a.app_event_class_id=b.id where a.app_event_class_id=#{app_event_class_id,jdbcType=INTEGER} limit #{start},#{pageSize}
+		
+	</select>
+	
+	<select id="countByAppEventClassId" resultType="java.lang.Integer">
+		select count(*) from app_event_set where app_event_class_id=#{app_event_class_id,jdbcType=INTEGER}
 	</select>
 	
 	<select id="findEventRemarkByEventName" parameterType="java.lang.String" resultType="java.lang.String">
@@ -16,13 +40,14 @@
  	</select>
 	
 	<insert id="addAppEventSet"  parameterType="com.jybb.pojo.AppEventSet">
- 		insert into app_event_set(app_event_name,app_event_remark) values(#{app_event_name,jdbcType=VARCHAR},#{app_event_remark,jdbcType=VARCHAR})
+ 		insert into app_event_set(app_event_name,app_event_remark,app_event_class_id) values(#{app_event_name,jdbcType=VARCHAR},#{app_event_remark,jdbcType=VARCHAR},#{app_event_class_id,jdbcType=INTEGER})
  	</insert>
  	
  	<update id="updateAppEventSet" parameterType="com.jybb.pojo.AppEventSet">
  		update app_event_set set 
  			app_event_name=#{app_event_name,jdbcType=VARCHAR},
- 			app_event_remark=#{app_event_remark,jdbcType=VARCHAR}
+ 			app_event_remark=#{app_event_remark,jdbcType=VARCHAR},
+ 			app_event_class_id=#{app_event_class_id,jdbcType=INTEGER}
  		where id=#{id,jdbcType=INTEGER}
  	</update>
  	

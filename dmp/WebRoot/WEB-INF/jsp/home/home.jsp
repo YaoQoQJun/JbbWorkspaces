@@ -100,8 +100,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			$("#myFrame").attr("src","appIndex/toAppIndex.do");
     		});
     		
+    		
     		$("#appEvent_a").click(function(){
     			$("#myFrame").attr("src","appEvent/toAppEvent.do");
+    		});
+    		
+    		$("#appEventClass_a").click(function(){
+    			$("#myFrame").attr("src","appEventClass/toAppEventClass.do");
     		});
     		
     		$("#appEventSet_a").click(function(){
@@ -316,6 +321,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        	</li>
 	        	
 	        	<li data-id="5" class="">
+	        		<a class="depth" href="javascript:void(0);" onclick="Openthis(this)"><i class="icon icon-60d"></i>功能设置</a>
+	        		<ul>
+	        		
+	        			<cc:ps privileges="${privileges}" privilege="访问,事件分类">
+	        			<li>
+	        				<a id="appEventClass_a" href="javascript:void(0);">事件分类</a>
+	        			</li>
+	        			</cc:ps>
+	        		
+	        			<cc:ps privileges="${privileges}" privilege="访问,事件设置">
+	        			<li>
+	        				<a id="appEventSet_a" href="javascript:void(0);">事件设置</a>
+	        			</li>
+	        			</cc:ps>
+	        		
+	        			<cc:ps privileges="${privileges}" privilege="访问,APP渠道">
+	        			<li>
+	        				<a id="appChannel_a" href="javascript:void(0);">APP渠道</a>
+	        			</li>
+	        			</cc:ps>
+	        			
+	        			<cc:ps privileges="${privileges}" privilege="访问,APP版本">
+	        			<li>
+	        				<a id="appVersion_a" href="javascript:void(0);">APP版本</a>
+	        			</li>
+	        			</cc:ps>
+	        			
+	        		</ul>
+	        	</li>
+	        	
+	        	<li data-id="5" class="">
 	        		<a class="depth" href="javascript:void(0);" onclick="Openthis(this)"><i class="icon icon-60d"></i>用户设置</a>
 	        		<ul>
 	        			<cc:ps privileges="${privileges}" privilege="访问,用户管理">
@@ -338,31 +374,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        				<a id="channel_manage_a" href="javascript:void(0);">渠道管理</a>
 	        			</li>
 	        			</cc:ps>
-	        		</ul>
-	        	</li>
-	        	
-	        	<li data-id="5" class="">
-	        		<a class="depth" href="javascript:void(0);" onclick="Openthis(this)"><i class="icon icon-60d"></i>功能设置</a>
-	        		<ul>
-	        		
-	        			<cc:ps privileges="${privileges}" privilege="访问,事件设置">
-	        			<li>
-	        				<a id="appEventSet_a" href="javascript:void(0);">事件设置</a>
-	        			</li>
-	        			</cc:ps>
-	        		
-	        			<cc:ps privileges="${privileges}" privilege="访问,APP渠道">
-	        			<li>
-	        				<a id="appChannel_a" href="javascript:void(0);">APP渠道</a>
-	        			</li>
-	        			</cc:ps>
-	        			
-	        			<cc:ps privileges="${privileges}" privilege="访问,APP版本">
-	        			<li>
-	        				<a id="appVersion_a" href="javascript:void(0);">APP版本</a>
-	        			</li>
-	        			</cc:ps>
-	        			
 	        		</ul>
 	        	</li>
 	        </ul>

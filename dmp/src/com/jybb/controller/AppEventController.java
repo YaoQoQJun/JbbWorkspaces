@@ -74,29 +74,32 @@ public class AppEventController {
 	public ModelAndView toAppEvent(
 			HttpSession session,
 			HttpServletRequest request,
-			HttpServletResponse response,String client_model,String channel_name,String app_version,Integer page) throws IOException{
+			HttpServletResponse response,Integer app_event_class_id,String client_model,String channel_name,String app_version,Integer page) throws IOException{
 		
 		
 		if(page==null||page==0){
 			page=1;
 		}
-		Integer start=(page-1)*PAGE_SIZE;
-		List<AppEventSet> appEventSets=appEventSetMapper.findAllByPage(start,PAGE_SIZE);
-		Integer total=appEventSetMapper.count();
-		Integer totalPage=total%PAGE_SIZE==0?total/PAGE_SIZE:total/PAGE_SIZE+1;
-		
-		
-		if(client_model==null||client_model==""){
+		if(client_model==null||"".equals(client_model)){
 			client_model="0";
 		}
 		
-		if(channel_name==null||channel_name==""){
+		if(channel_name==null||"".equals(channel_name)){
 			channel_name="0";
 		}
 		
-		if(app_version==null||app_version==""){
+		if(app_version==null||"".equals(app_version)){
 			app_version="0";
 		}
+		if(app_event_class_id==null||"".equals(app_event_class_id)){
+			app_event_class_id=0;
+		}
+		
+		Integer start=(page-1)*PAGE_SIZE;
+		List<Map<String,String>> appEventSets=appEventSetMapper.findAllByPageAndAppEventClassId(app_event_class_id,start,PAGE_SIZE);
+		Integer total=appEventSetMapper.countByAppEventClassId(app_event_class_id);
+		Integer totalPage=total%PAGE_SIZE==0?total/PAGE_SIZE:total/PAGE_SIZE+1;
+		
 		
 		String tStartTime=getStartTime(System.currentTimeMillis())+"";
 		String tEndTime=getEndTime(System.currentTimeMillis())+"";
@@ -108,9 +111,9 @@ public class AppEventController {
 		
 		for (int i = 0; i < appEventSets.size(); i++) {
 			Map<String,String> map=new HashMap<String,String>();
-			AppEventSet appEventSet=appEventSets.get(i);
-			String event_name=appEventSet.getApp_event_name();
-			String event_remark=appEventSet.getApp_event_remark();
+			Map<String,String> appEventSet=appEventSets.get(i);
+			String event_name=appEventSet.get("app_event_name");
+			String event_remark=appEventSet.get("app_event_remark");
 			
 			//1--根据用户去重，统计用户在该事件上出发的消息量
 			Integer todayCount=appEventMapper.countEvent(event_name,client_model,channel_name,app_version,tStartTime,tEndTime);
@@ -148,6 +151,7 @@ public class AppEventController {
 			.addObject("page", page)
 			.addObject("total", total)
 			.addObject("totalPage", totalPage)
+			.addObject("app_event_class_id",app_event_class_id+"")
 			.addObject("appChannels", appChannels)
 			.addObject("appVersions", appVersions)
 			.addObject("lists", lists)

@@ -27,12 +27,20 @@
 			a.app_event_remark,
 			a.app_event_class_id,
 			b.app_event_class_name 
-		from app_event_set a left join app_event_class b on a.app_event_class_id=b.id where a.app_event_class_id=#{app_event_class_id,jdbcType=INTEGER} limit #{start},#{pageSize}
+		from app_event_set a left join app_event_class b on a.app_event_class_id=b.id 
+		where 1=1 
+		<if test="app_event_class_id != 0">
+ 			and a.app_event_class_id=#{app_event_class_id,jdbcType=INTEGER}
+ 		</if> 
+		limit #{start},#{pageSize}
 		
 	</select>
 	
 	<select id="countByAppEventClassId" resultType="java.lang.Integer">
-		select count(*) from app_event_set where app_event_class_id=#{app_event_class_id,jdbcType=INTEGER}
+		select count(*) from app_event_set where 1=1
+		<if test="app_event_class_id != 0">
+ 			and app_event_class_id=#{app_event_class_id,jdbcType=INTEGER}
+ 		</if>
 	</select>
 	
 	<select id="findEventRemarkByEventName" parameterType="java.lang.String" resultType="java.lang.String">

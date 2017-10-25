@@ -58,9 +58,6 @@ public class AppEventClassController {
 		
 		List<AppEventClass> appEventClasss=appEventClassMapper.findAllByPage(start,PAGE_SIZE);
 		Integer total=appEventClassMapper.count();
-		
-		System.out.println(appEventClasss.size()+" , "+total);
-		
 		Integer totalPage=total%PAGE_SIZE==0?total/PAGE_SIZE:total/PAGE_SIZE+1;
 		
 		return new ModelAndView("appEventClass/appEventClass")
